@@ -31,7 +31,6 @@ class UserProfileForm(forms.ModelForm):
                 raise ValidationError("Resume must be in pdf format !!!")
         return resume
 
-
     def clean_profile_picture(self):
         pp = self.cleaned_data.get('profile_picture')
         if pp:
