@@ -1,10 +1,11 @@
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from core.models import Category, Job, JobApplication, Contact
 
-from .serializers import CategorySerializers, JobModelSerializer
+from .serializers import CategorySerializers, JobModelSerializer, ContactSerializer
 
 
 # Create your views here.
@@ -27,5 +28,16 @@ class ContactCreateView(CreateAPIView):
         Contact.objects.create(**validated_data)
         return Response(serializer.data)
 
-# video date 4th July 2023 startapp - api-crud - 18:16 min
-# video date 6th July 2023 auth token login 12 min
+class ContactListCreateView(APIView):
+
+    def get(self, *args, **kwargs):
+        contact = Contact.objects.all()
+        serializer = ContactSerializer(contact, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        serializer = ContactSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        Contact.objects.create(**validated_data)
+        return Response(serializer.data)
